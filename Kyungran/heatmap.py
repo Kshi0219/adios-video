@@ -21,7 +21,7 @@ def create_player_data(data):
             row = {
                 'player_id': player_id,
                 'team': player_info.get('team', None),
-                'bbox': player_info.get('bbox', None),
+                'bbox': player_info['bbox'],
                 'team_color': player_info.get('team_color', None),
                 'has_ball': player_info.get('has_ball', False),
                 'kr_name': player_info.get('kr_name', None)}
@@ -65,7 +65,7 @@ def visual_teamA_heatmap(player_data, save_path=None):
     team_b = player_data[player_data['team'] == 1]
 
     # 시각화
-    fig, ax = plt.subplots(figsize=(7, 4))
+    fig, ax = plt.subplots(figsize=(8, 4))
     pitch = Pitch(pitch_type='statsbomb', pitch_color='white', line_color='#c7d5cc')  # 선 색깔
 
     pitch.draw(ax=ax)
@@ -104,7 +104,7 @@ def visual_teamB_heatmap(player_data, save_path=None):
     team_b = player_data[player_data['team'] == 1]
 
     # 시각화
-    fig, ax = plt.subplots(figsize=(7, 4))
+    fig, ax = plt.subplots(figsize=(8, 4))
     pitch = Pitch(pitch_type='statsbomb', pitch_color='white', line_color='#c7d5cc')  # 선 색깔
 
     pitch.draw(ax=ax)
