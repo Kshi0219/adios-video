@@ -14,6 +14,7 @@ class teamHeatmap:
         df_path=f"df/heatmap/{match_id}-heatmap-df.csv"
         if os.path.exists(df_path):
             player_data=pd.read_csv(df_path,index_col=0)
+            print('df for heatmap exists!')
             return player_data
         player_data = []
         for frame_num,player in enumerate(tracks['players']):
@@ -41,7 +42,9 @@ class teamHeatmap:
     
     # 히트맵 생성 함수
     def gen_team_heatmap(self,tracks,base_pitch_path:str,match_id:str,heatmap_save_path:str):
-        
+        if len(glob(heatmap_save_path+f"/{match_id}*"))==2:
+            print('img files already exist!')
+            return None
             
         player_data=self.create_player_data(tracks,match_id)
         base_pitch=plt.imread(base_pitch_path)
