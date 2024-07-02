@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 from team_heatmap import teamHeatmap
 from passmap import PassMap
 from hasball_report import possessionReport
+from stats_gen import statGenerator
 
 def main():
     with open('track-stub/tracks_name+ba.pkl','rb') as load1:
@@ -26,5 +27,7 @@ def main():
     possession_dmr_path_list=hasball_report.visual_activate_zone(match_id,
                                                                  'viz/possession')
 
+    stat_gen=statGenerator(f"track-stub/{match_id}-track-stub.pkl")
+    speed_dist_stats_df=stat_gen.calc_speed_dist('df/stats',match_id)
 if __name__=='__main__':
     main()
