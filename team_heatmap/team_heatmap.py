@@ -51,7 +51,7 @@ class teamHeatmap:
         if len(glob(heatmap_save_path+f"/{match_id}*"))==2:
             print('heatmap img files already exist!')
             return glob(heatmap_save_path+f"/{match_id}*")
-            
+        print('making heatmap viz...')
         player_data=self.create_player_data(tracks,match_id)
         base_pitch=plt.imread(base_pitch_path)
         # 팀 분리
@@ -80,6 +80,7 @@ class teamHeatmap:
                 plt.gca().invert_yaxis()
                 plt.axis('off')
                 plt.savefig(heatmap_save_path+f"/{match_id}-heatmap-team_a.png",
+                            dpi=300,
                             bbox_inches='tight')
             else:
                 # KDE 히트맵 생성
@@ -97,5 +98,7 @@ class teamHeatmap:
                 plt.gca().invert_yaxis()
                 plt.axis('off')
                 plt.savefig(heatmap_save_path+f"/{match_id}-heatmap-team_b.png",
+                            dpi=300,
                             bbox_inches='tight')
+            print('heatmap viz created!')
         return glob(heatmap_save_path+f"/{match_id}*")
