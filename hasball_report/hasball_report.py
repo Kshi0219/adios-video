@@ -16,7 +16,7 @@ class possessionReport:
         team_a=player_data.query("start_pitch_side=='left'")
         team_b=player_data.query("start_pitch_side=='right'")
 
-        # 구역별 점유율(가로 기준)
+        # 구역별 점유율(세로 기준)
         categories = ['Left Side', 'Middle', 'Right Side']
         team_a['region_y'] = pd.cut(team_a['coord_y'], 
                                     bins=[0, 140, 280, 420], 
@@ -28,7 +28,7 @@ class possessionReport:
         team_a_y = team_a['region_y'].value_counts(normalize=True).reindex(categories) * 100
         team_b_y = team_b['region_y'].value_counts(normalize=True).reindex(categories[::-1])* 100
 
-        # 구역별 점유율(세로 기준)
+        # 구역별 점유율(가로 기준)
         team_a['region_x'] = pd.cut(team_a['coord_x'], 
                                     bins=[0, 270, 540, 810], 
                                     labels=categories, ordered=True)
@@ -53,7 +53,7 @@ class possessionReport:
         return team_a_df, team_b_df
     
     # 점유율 시각화 리포트 생성 및 저장
-    # 구역별 점유율 시각화 (가로 기준)
+    # 구역별 점유율 시각화 (세로 기준)
     def visual_possession(self,match_id:str,save_path:str):
         if not os.path.exists(save_path):
             print('no dir for possession report 1\nmaking dir for possession report 1')
@@ -107,7 +107,7 @@ class possessionReport:
             return glob(save_path+f"/{match_id}-possession-lmr*")
 
 
-    # 구역별 점유율 시각화 (세로 기준)
+    # 구역별 점유율 시각화 (가로 기준)
     def visual_activate_zone(self,match_id:str,save_path:str):
         if len(glob(f"{save_path}/{match_id}-possession-dma.png"))==1:
             print('possession report 2 already exists!')

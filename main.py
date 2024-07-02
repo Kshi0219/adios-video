@@ -1,14 +1,11 @@
 import pickle
 from utils import read_video,save_video
 from tracker import Tracker
-# from keypoint_detection import *
-from draw_annotation import *
-from team_assigner import *
-from player_ball_assigner import *
+from team_assigner import TeamAssigner
+from player_ball_assigner import ballAssigner
 import cv2
 from perspective_changer import perspectiveChanger
 from video_2_frames import video2frames
-from team_heatmap import teamHeatmap
 
 def main():
     # 영상 불러오기
@@ -28,9 +25,6 @@ def main():
     frames_left=frame_dict['left']
     frames_right=frame_dict['right']
 
-    # 기본 경기장 규격
-    base_pitch=cv2.imread('test/img/nuri-futsal.png')
-
     # 트래커 클래스 시작
     model_path_player='model/best-player-detector.pt'
     model_path_ball='model/best-ball-detector.pt'
@@ -49,7 +43,7 @@ def main():
     tracks=tracker.concat_tracks(tracks_left,tracks_right)
     
     # homography 적용
-    homography_json_path='test/homography_dict.json'
+    homography_json_path='homography_dict.json'
     homograph_adapter=perspectiveChanger(homography_json_path)
     tracks_changed=homograph_adapter.perspective_transformer(tracks)
     
