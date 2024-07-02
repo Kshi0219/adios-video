@@ -53,9 +53,11 @@ class PassMap:
         if not os.path.exists(pass_df_path):
             print('dir for pass df not exists\nmaking dir...')
             os.mkdir(pass_df_path)
-            print('dir created!')
+            print('dir for pass df created!')
         else:
+            print('dir for pass df exists!')
             if len(glob(pass_df_path+f"/{match_id}*"))==2:
+                print('pass df already exists!')
                 self.df_passmap_success=pd.read_csv(pass_df_path+f"/{match_id}-pass-success-df.csv")
                 self.df_passmap_fail=pd.read_csv(pass_df_path+f"/{match_id}-pass-fail-df.csv")
         passmap_success = []
@@ -113,14 +115,16 @@ class PassMap:
             os.mkdir(passmap_viz_path)
             print('dir for passmap viz created!')
         else:
+            print('dir exists')
             if len(glob(passmap_viz_path+f"/{match_id}*"))==2:
+                print('pass map viz already exists!')
                 return glob(passmap_viz_path+f"{match_id}*")
+        print('making passmap vizs...')
         plt.rcParams['axes.unicode_minus'] = False
         f_path = "font/malgun.ttf"
         font_name = font_manager.FontProperties(fname=f_path).get_name()
         rc('font', family=font_name)
         df_passmap=self.df_passmap_success
-        team_colors = {0: (0.15, 0.43, 0.86), 1: (0.9, 0.24, 0.15)}
         df_passmap_split={'Team-A':df_passmap.query("start_pitch_side=='left'"),
                           'Team-B':df_passmap.query("start_pitch_side=='right'")}
         for team,df_passmap in df_passmap_split.items():
@@ -155,10 +159,11 @@ class PassMap:
             for idx, row in avg_positions.iterrows():
                 avg_x = row['passer_x']
                 avg_y = row['passer_y']
-                plt.text(avg_x, avg_y - 35, idx, fontsize=10, fontweight='bold', ha='center', va='top', color='black', zorder=3)
+                plt.text(avg_x, avg_y - 50, idx, fontsize=10, fontweight='bold', ha='center', va='top', color='black', zorder=3)
             if team=='Team-A':
                 output_path = passmap_viz_path+f"/{match_id}-passmap-team_a.png"
             else:
                 output_path = passmap_viz_path+f"/{match_id}-passmap-team_b.png"
             plt.savefig(output_path, dpi=300, bbox_inches='tight')
+            print('passmap viz created!')
         return glob(passmap_viz_path+f"{match_id}*")
