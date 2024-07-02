@@ -24,6 +24,7 @@ class teamHeatmap:
                     'player_id': player_id,
                     'team': player_info.get('team', None),
                     'team_color': player_info.get('team_color', None),
+                    'has_ball':player_info.get('has_ball',None),
                     'coord_x': player_info['coord_tr'][0],
                     'coord_y': player_info['coord_tr'][1],
                     'start_pitch_side':tracks['players'][0][player_id]['pitch_side']}
@@ -43,8 +44,8 @@ class teamHeatmap:
     # 히트맵 생성 함수
     def gen_team_heatmap(self,tracks,base_pitch_path:str,match_id:str,heatmap_save_path:str):
         if len(glob(heatmap_save_path+f"/{match_id}*"))==2:
-            print('img files already exist!')
-            return None
+            print('heatmap img files already exist!')
+            return glob(heatmap_save_path+f"/{match_id}*")
             
         player_data=self.create_player_data(tracks,match_id)
         base_pitch=plt.imread(base_pitch_path)
@@ -73,7 +74,7 @@ class teamHeatmap:
                 # y축 반전
                 plt.gca().invert_yaxis()
                 plt.axis('off')
-                plt.savefig(heatmap_save_path+f"/{match_id}-heatmap-team-a.png",
+                plt.savefig(heatmap_save_path+f"/{match_id}-heatmap-team_a.png",
                             bbox_inches='tight')
             else:
                 # KDE 히트맵 생성
@@ -90,5 +91,6 @@ class teamHeatmap:
                 # y축 반전
                 plt.gca().invert_yaxis()
                 plt.axis('off')
-                plt.savefig(heatmap_save_path+f"/{match_id}-heatmap-team-b.png",
+                plt.savefig(heatmap_save_path+f"/{match_id}-heatmap-team_b.png",
                             bbox_inches='tight')
+        return glob(heatmap_save_path+f"/{match_id}*")
