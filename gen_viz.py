@@ -29,5 +29,9 @@ def main():
 
     stat_gen=statGenerator(f"track-stub/{match_id}-track-stub.pkl")
     speed_dist_stats_df=stat_gen.calc_speed_dist('df/stats',match_id)
+    pass_stats_df=stat_gen.calc_pass(match_id)
+
+    stat_gen.merge_stats(speed_dist_stats_df,pass_stats_df,
+                         'df/stats',match_id)
 if __name__=='__main__':
     main()

@@ -60,7 +60,7 @@ class statGenerator:
                         tracks[object][frame_num_batch][track_id]['distance'] = total_distance[object][track_id]
         return tracks
     
-    # pickle to dataframe(속도 & 거리)
+    # pickle to dataframe(속도 & 거리) - raw data 생성 / 저장
     def speed_dist_pkl_2_df(self,save_path:str,match_id:str):
         spddst_path=f"{save_path}/{match_id}-speed_dist-raw.csv"
         if not os.path.exists(save_path):
@@ -84,7 +84,7 @@ class statGenerator:
         df.to_csv(spddst_path)
         return df
     
-    # 스탯 생성
+    # 속도, 거리 스탯 생성
     def calc_speed_dist(self,save_path:str,match_id:str):
         spdst_df=self.speed_dist_pkl_2_df(save_path,
                                           match_id)
@@ -104,4 +104,42 @@ class statGenerator:
                 'total_distance(m)': distance,
                 })
         df_calc = pd.DataFrame(player_stat)
+        df_calc.to_csv(f"df/stats/{match_id}-speed_dist-stats.csv")
         return df_calc
+    
+    # 패스 스탯 생성
+    def calc_pass(self,match_id:str):
+        df_passmap_success=pd.read_csv(f"df/passmap/{match_id}-pass-success-df.csv",
+                                       index_col=0)
+        df_passmap_fail=pd.read_csv(f"df/passmap/{match_id}-pass-fail-df.csv",
+                                       index_col=0)
+        
+        pass_success_count=df_passmap_success['passer_name'].value_counts()
+        pass_success_count.name='pass_success_count'
+
+        pass_fail_count=df_passmap_fail['passer_name'].value_counts()
+        pass_fail_count.name='pass_fail_count'
+
+        pass_intercept_count = df_passmap_fail['interceptor_name'].value_counts()
+        pass_intercept_count.name = 'pass_intercept_count'
+
+        # 두 Series를 DataFrame으로 결합
+        df_combined = pd.concat(
+            [pass_success_count, pass_fail_count, pass_intercept_count],axis=1)
+
+        # NaN 값을 0으로 대체
+        df_pass_count = df_combined.fillna(0)
+
+        df_pass_count['pass_success_rate(%)'] = round(
+            (df_pass_count['pass_success_count'] / 
+             (df_pass_count['pass_success_count'] + df_pass_count['pass_fail_count'])) * 100, 2)
+
+        df_pass_count_sorted = df_pass_count.sort_values(by='pass_success_rate(%)', ascending=False).reset_index()
+        df_pass_count_sorted.rename({'index':'player_name'},axis=1,inplace=True)
+        df_pass_count_sorted.to_csv(f"df/stats/{match_id}-pass-stats.csv")
+        return df_pass_count_sorted
+    
+    def merge_stats(self,speed_dist_stat_df,pass_stat_df,save_path:str,match_id:str):
+        stat_df=speed_dist_stat_df.merge(pass_stat_df,on='player_name')
+        stat_df.to_csv(f"{save_path}/{match_id}-stats.csv")
+        return stat_df
