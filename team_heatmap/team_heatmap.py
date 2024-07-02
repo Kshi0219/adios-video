@@ -4,6 +4,7 @@ import os
 from glob import glob
 import matplotlib.pyplot as plt
 import seaborn as sns
+import pickle
 
 class teamHeatmap:
     def __init__(self):
@@ -19,6 +20,8 @@ class teamHeatmap:
         player_data = []
         for frame_num,player in enumerate(tracks['players']):
             for player_id, player_info in player.items():
+                start_pitch_side=tracks['players'][0][player_id]['pitch_side']
+                player_info['start_pitch_side']=start_pitch_side
                 row = {
                     'frame_num':frame_num,
                     'player_id': player_id,
@@ -27,17 +30,19 @@ class teamHeatmap:
                     'has_ball':player_info.get('has_ball',None),
                     'coord_x': player_info['coord_tr'][0],
                     'coord_y': player_info['coord_tr'][1],
-                    'start_pitch_side':tracks['players'][0][player_id]['pitch_side']}
+                    'start_pitch_side':start_pitch_side}
                 if row['coord_x']<80 and row['coord_y'] in range(80,280):
                     row['in_pa']='left_pa'
                 elif row['coord_x']>680 and row['coord_y'] in range(80,280):
                     row['in_pa']='right_pa'
                 else:
                     row['in_pa']='non_pa'
+                player_info['in_pa']=row['in_pa']
                 player_data.append(row)
 
         player_data = pd.DataFrame(player_data)
-
+        with open(f"track-stub/{match_id}-track-stub.pkl",'wb') as save:
+            pickle.dump(tracks,save)
         player_data.to_csv(f"df/heatmap/{match_id}-heatmap-df.csv")
         return player_data
     
