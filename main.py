@@ -8,6 +8,7 @@ from player_ball_assigner import *
 import cv2
 from perspective_changer import perspectiveChanger
 from video_2_frames import video2frames
+from team_heatmap import teamHeatmap
 
 def main():
     # 영상 불러오기
@@ -66,29 +67,6 @@ def main():
 
     with open('track-stub/twp-tracks-3.pkl','wb') as s1:
         pickle.dump(tracks_assigned_2,s1)
-    
-    """# 팀 정보 포함된 stub 저장
-    with open('track-stub/tracks-concat-1.pkl','wb') as s:
-        pickle.dump(tracks_assigned_2,s)
-    '''with open(track_stub_path_left,'wb') as s_left:
-        pickle.dump(tracks_assigned_2_left,s_left)
-    
-    with open(track_stub_path_right,'wb') as s_right:
-        pickle.dump(tracks_assigned_2_right,s_right)'''
-
-    # annotate
-    output_frames=annotator().annotate(base_pitch,tracks_assigned_2)
-    # output_frames_left=annotator().annotate(frames_left,tracks_assigned_2_left)
-    # output_frames_right=annotator().annotate(frames_right,tracks_assigned_2_right)
-
-
-    # annotate한 영상 저장
-    save_video(output_frames,
-               'output_video/concat_1.mp4')
-    save_video(output_frames_left,
-               'output-video/output-l/output_left_1q(2m).avi')
-    save_video(output_frames_right,
-               'output-video/output-l/output_right_1q(2m).avi')"""
 
 if __name__=='__main__':
     main()
