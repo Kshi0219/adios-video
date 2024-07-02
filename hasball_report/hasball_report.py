@@ -37,7 +37,7 @@ class possessionReport:
                                     bins=[0, 270, 540, 810], 
                                     labels=categories[::-1], ordered=True)
 
-        team_a_x = team_a['region_x'].value_counts(normalize=True).reindex(categories)*100 # 영역 비율 계산
+        team_a_x = team_a['region_x'].value_counts(normalize=True).reindxex(categories)*100 # 영역 비율 계산
         team_b_x = team_b['region_x'].value_counts(normalize=True).reindex(categories[::-1])*100 
 
         # 데이터 프레임 생성
@@ -61,7 +61,7 @@ class possessionReport:
             print('dir for possession report 1 created!')
         if len(glob(save_path+f"/{match_id}*"))==2:
             print('possession_report already exist!')
-            return glob(save_path+f"/{match_id}*")
+            return glob(save_path+f"/{match_id}-possession-lmr*")
         else:
             print('making possession report 1...')
             play_data_team_a,play_data_team_b=self.create_possession_frame()
@@ -99,13 +99,12 @@ class possessionReport:
                         ax.axhline(y=y_start + 90, xmin=0.01, xmax=5, color='#BCBCBC', linestyle='--')
 
                 ax.imshow(nuri_pitch, extent=[2.5, 802.5, 2.5, 402.5])
-                ax.set_title(f'{team_name}', fontsize=12)
                 ax.axis('off')
                 plt.savefig(f"{save_path}/{match_id}-possession-lmr-{team_name}.png",
                             dpi=300,
                             bbox_inches='tight')
             print('possession report 1 created!')
-            return glob(save_path+f"/{match_id}*")
+            return glob(save_path+f"/{match_id}-possession-lmr*")
 
 
     # 구역별 점유율 시각화 (세로 기준)
