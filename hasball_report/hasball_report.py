@@ -37,7 +37,7 @@ class possessionReport:
                                     bins=[0, 270, 540, 810], 
                                     labels=categories[::-1], ordered=True)
 
-        team_a_x = team_a['region_x'].value_counts(normalize=True).reindxex(categories)*100 # 영역 비율 계산
+        team_a_x = team_a['region_x'].value_counts(normalize=True).reindex(categories)*100 # 영역 비율 계산
         team_b_x = team_b['region_x'].value_counts(normalize=True).reindex(categories[::-1])*100 
 
         # 데이터 프레임 생성
