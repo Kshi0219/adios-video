@@ -15,7 +15,7 @@ def main():
     passmap.players_withball_data()
     passmap.player_average_coord()
     passmap.create_passmap_data(match_id,'df/passmap')
-    passmap.passmap_plot('viz/passmap',match_id)
+    passmap_path_list=passmap.passmap_plot('viz/passmap',match_id)
 
 if __name__=='__main__':
     main()
