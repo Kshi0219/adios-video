@@ -1,22 +1,14 @@
 import pickle
-from utils import read_video,save_video
 from tracker import Tracker
-# from keypoint_detection import *
 from draw_annotation import *
 from team_assigner import *
 from player_ball_assigner import *
 import cv2
 from perspective_changer import perspectiveChanger
 from video_2_frames import video2frames
-from team_heatmap import teamHeatmap
 
 def main():
     # 영상 불러오기
-    '''frames_left=read_video('input-video/test-left-1q.mp4')
-    frames_right=read_video('input-video/test-right-1q.mp4')[10:]
-    min_frame_len=min(len(frames_left),len(frames_right))
-    frames_left=frames_left[:min_frame_len]
-    frames_right=frames_right[:min_frame_len]'''
     video_path_left='input-video/test-left-1q.mp4'
     pic_path_left='input-pic/1q/left'
     video_path_right='input-video/test-right-1q.mp4'
